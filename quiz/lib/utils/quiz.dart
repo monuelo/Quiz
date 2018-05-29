@@ -1,4 +1,5 @@
 import './question.dart';
+import './data.dart';
 
 class Quiz {
   List<Question> _questions;
@@ -6,7 +7,6 @@ class Quiz {
   int _score;
 
   Quiz(this._questions) {
-    _questions.shuffle();
     this._score = 0;
     this._currentQuestionIndex = -1;
   }

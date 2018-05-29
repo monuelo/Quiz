@@ -1,7 +1,11 @@
+import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import '../utils/question.dart';
 import '../utils/quiz.dart';
+import '../utils/data.dart';
 
 import '../UI/answer_button.dart';
 import '../UI/question_text.dart';
@@ -17,7 +21,7 @@ class QuizPage extends StatefulWidget {
 
 
 class QuizPageState extends State<QuizPage> {
-
+  List data, temp;
   Question currentQuestion;
   Quiz quiz = new Quiz([
     new Question("Elon Musk is human", false),
@@ -30,9 +34,32 @@ class QuizPageState extends State<QuizPage> {
   bool isCorrect;
   bool overlayShoudBeVisible  = false;
 
+
+  Future<String> getData() async {
+    http.Response response = await http.get(
+      Uri.encodeFull('https://boolean-quiz.firebaseio.com/.json'),
+      headers: {
+        "Accept": "application/json"
+      }
+    );
+
+    this.setState((){
+      temp = JSON.decode(response.body);
+    });
+    data = new List<Question>();
+    for(int i = 0; i < temp.length; i++) {
+      String question = temp[i]['question'];
+      bool answer = temp[i]['answer'];
+      data.add(new Question(question, answer));
+    }
+    quiz = new Quiz(data);
+    return "Success!";
+  }
+
   @override
   void initState() {
     super.initState();
+    this.getData();
     currentQuestion = quiz.nextQuestion;
     questionText = currentQuestion.question;
     questionNumber = quiz.questionNumber;
