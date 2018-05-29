@@ -11,55 +11,45 @@ import '../UI/answer_button.dart';
 import '../UI/question_text.dart';
 import '../UI/correct_wrong_overlay.dart';
 
-import '../pages/score_page.dart';
-
+import './score_page.dart';
+import './settings.dart';
 
 class QuizPage extends StatefulWidget {
+  List data;
+  int numQuestions;
+  QuizPage(this.data, this.numQuestions);
+
   @override
-  State createState() => new QuizPageState();
+  State createState() => new QuizPageState(this.data, this.numQuestions);
 }
 
 
 class QuizPageState extends State<QuizPage> {
-  List data, temp;
-  Question currentQuestion;
-  Quiz quiz = new Quiz([
-    new Question("Elon Musk is human", false),
-    new Question("Pizza is healthy", false),
-    new Question("Flutter is awesome", true)
-  ]);
+  
+  List data;
+  int numQuestions;
 
+  static List<Question> aux;
+  QuizPageState(this.data, this.numQuestions){
+    aux = new List();
+    for(int i = 0; i < data.length; i++){
+      aux.add(new Question(data[i]['question'], data[i]['answer']));
+    }
+  }
+
+  Question currentQuestion;
+  Quiz quiz;
+
+    
   String questionText;
   int questionNumber;
   bool isCorrect;
   bool overlayShoudBeVisible  = false;
 
-
-  Future<String> getData() async {
-    http.Response response = await http.get(
-      Uri.encodeFull('https://boolean-quiz.firebaseio.com/.json'),
-      headers: {
-        "Accept": "application/json"
-      }
-    );
-
-    this.setState((){
-      temp = JSON.decode(response.body);
-    });
-    data = new List<Question>();
-    for(int i = 0; i < temp.length; i++) {
-      String question = temp[i]['question'];
-      bool answer = temp[i]['answer'];
-      data.add(new Question(question, answer));
-    }
-    quiz = new Quiz(data);
-    return "Success!";
-  }
-
   @override
   void initState() {
     super.initState();
-    this.getData();
+    quiz = new Quiz(aux, this.numQuestions);
     currentQuestion = quiz.nextQuestion;
     questionText = currentQuestion.question;
     questionNumber = quiz.questionNumber;

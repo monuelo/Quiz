@@ -6,7 +6,9 @@ class Quiz {
   int _currentQuestionIndex;
   int _score;
 
-  Quiz(this._questions) {
+  Quiz(List data, int qnt) {
+    this._questions = data.skip(0).take(qnt).toList();
+    this._questions.shuffle();
     this._score = 0;
     this._currentQuestionIndex = -1;
   }
