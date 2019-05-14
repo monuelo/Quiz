@@ -52,7 +52,7 @@ class CorrectWrongOverlayState extends State<CorrectWrongOverlay> with TickerPro
                 shape: BoxShape.circle
               ),
               child: new Transform.rotate(
-                angle: _iconAnimation.value * 2 * PI,
+                angle: _iconAnimation.value * 2 * pi,
                 child: new Icon((widget._isCorrect) ? Icons.done : Icons.clear, size: _iconAnimation.value * 120.0,),
               ),
             ),

@@ -9,7 +9,7 @@ class Data{
   
   Future<http.Response> fetchPost() async{
     final response = await http.get('https://boolean-quiz.firebaseio.com/.json');
-    data = JSON.decode(response.body);
+    data = json.decode(response.body);
     List responseJson = json.decode(response.body); 
     data = responseJson;
     exportQuestions();

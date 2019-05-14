@@ -33,7 +33,7 @@ class LoaderState extends State<Loader> {
     );
 
     this.setState((){
-    data = JSON.decode(response.body);
+    data = json.decode(response.body);
     // List aux = new List();
     // for(int i = 0; i < temp.length; i++) {
     //   aux.add( new Question(temp[0]['question'], temp[0]['answer']));
